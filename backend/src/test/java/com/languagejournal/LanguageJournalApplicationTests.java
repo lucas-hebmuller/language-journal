@@ -1,4 +1,4 @@
-package com.languagejournal.languagejournal;
+package com.languagejournal;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

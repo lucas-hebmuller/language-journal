@@ -1,4 +1,4 @@
-package com.languagejournal.languagejournal;
+package com.languagejournal;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,8 +1,8 @@
 package com.languagejournal.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -13,14 +13,68 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @NotBlank(message = "Name cannot be blank!")
-    @Size(min = 2, max = 100, message = "Name must be between between 2 and 100 characters.")
     @Column(nullable = false, length = 100)
     private String name;
 
-    @NotBlank(message = "Email cannot be blank!")
-    @Email(message = "Email must be valid.")
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    @Column(nullable = false, length = 255)
+    private String password;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    public User() {}
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

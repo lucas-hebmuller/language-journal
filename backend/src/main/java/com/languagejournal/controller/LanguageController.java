@@ -1,7 +1,7 @@
 package com.languagejournal.controller;
 
 import com.languagejournal.dto.LanguageRequest;
-import com.languagejournal.model.Language;
+import com.languagejournal.dto.LanguageResponse;
 import com.languagejournal.security.JwtUtil;
 import com.languagejournal.service.LanguageService;
 import com.languagejournal.service.UserService;
@@ -38,28 +38,28 @@ public class LanguageController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Language>> getLanguages(HttpServletRequest request) {
+    public ResponseEntity<List<LanguageResponse>> getLanguages(HttpServletRequest request) {
         UUID userId = extractUserId(request);
-        List<Language> languages = languageService.getLanguagesByUser(userId);
+        List<LanguageResponse> languages = languageService.getLanguagesByUser(userId);
         return ResponseEntity.ok(languages);
     }
 
     @PostMapping
-    public ResponseEntity<Language> createLanguage(
+    public ResponseEntity<LanguageResponse> createLanguage(
             HttpServletRequest request,
             @Valid @RequestBody LanguageRequest languageRequest) {
         UUID userId = extractUserId(request);
-        Language createdLanguage = languageService.createLanguage(userId, languageRequest);
+        LanguageResponse createdLanguage = languageService.createLanguage(userId, languageRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdLanguage);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Language> updateLanguage(
+    public ResponseEntity<LanguageResponse> updateLanguage(
             HttpServletRequest request,
             @PathVariable("id") Long languageId,
             @Valid @RequestBody LanguageRequest languageRequest) {
         UUID userId = extractUserId(request);
-        Language updatedLanguage = languageService.updateLanguage(userId, languageId, languageRequest);
+        LanguageResponse updatedLanguage = languageService.updateLanguage(userId, languageId, languageRequest);
         return ResponseEntity.ok(updatedLanguage);
     }
 

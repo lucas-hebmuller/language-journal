@@ -1,6 +1,7 @@
 package com.languagejournal.service;
 
 import com.languagejournal.dto.LanguageRequest;
+import com.languagejournal.dto.LanguageResponse;
 import com.languagejournal.model.Language;
 import com.languagejournal.model.User;
 import com.languagejournal.repository.LanguageRepository;
@@ -22,22 +23,34 @@ public class LanguageService {
         this.languageRepository = languageRepository;
     }
 
-    public List<Language> getLanguagesByUser(UUID userId) {
-        return languageRepository.findByUserId(userId);
+    private LanguageResponse toResponse(Language language) {
+        return new LanguageResponse(
+                language.getId(),
+                language.getName(),
+                language.getColorHex(),
+                language.getCreatedAt()
+        );
+    }
+
+    public List<LanguageResponse> getLanguagesByUser(UUID userId) {
+        return languageRepository.findByUserId(userId)
+                .stream()
+                .map(this::toResponse)
+                .toList();
     }
 
     @Transactional
-    public Language createLanguage(UUID userId, LanguageRequest request) {
+    public LanguageResponse createLanguage(UUID userId, LanguageRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Language language = new Language(user, request.getName(), request.getColorHex());
 
-        return languageRepository.save(language);
+        return toResponse(languageRepository.save(language));
     }
 
     @Transactional
-    public Language updateLanguage(UUID userId, Long languageId, LanguageRequest request) {
+    public LanguageResponse updateLanguage(UUID userId, Long languageId, LanguageRequest request) {
         Language language = languageRepository.findById(languageId)
                 .orElseThrow(() -> new RuntimeException("Language not found"));
 
@@ -48,7 +61,7 @@ public class LanguageService {
         language.setName(request.getName());
         language.setColorHex(request.getColorHex());
 
-        return languageRepository.save(language);
+        return toResponse(languageRepository.save(language));
     }
 
     @Transactional

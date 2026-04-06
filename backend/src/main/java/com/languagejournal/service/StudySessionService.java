@@ -11,8 +11,12 @@ import com.languagejournal.repository.SkillRepository;
 import com.languagejournal.repository.StudySessionRepository;
 import com.languagejournal.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -48,11 +52,19 @@ public class StudySessionService {
         );
     }
 
-    public List<StudySessionResponse> getSessionByUser(UUID userId) {
-        return studySessionRepository.findByUserId(userId)
-                .stream()
-                .map(this::toResponse)
-                .toList();
+    public Page<StudySessionResponse> getSessionsByUser(
+            UUID userId,
+            Long languageId,
+            Long skillId,
+            LocalDate from,
+            LocalDate to,
+            int page,
+            int size) {
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return studySessionRepository.findFiltered(userId, languageId, skillId, from, to, pageable)
+                .map(this::toResponse);
     }
 
     @Transactional

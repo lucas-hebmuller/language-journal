@@ -7,11 +7,15 @@ import com.languagejournal.service.StudySessionService;
 import com.languagejournal.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
@@ -37,9 +41,17 @@ public class StudySessionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<StudySessionResponse>> getSessions(HttpServletRequest request) {
+    public ResponseEntity<Page<StudySessionResponse>> getSessions(
+            @PageableDefault(size = 10, sort = "date", direction = Sort.Direction.DESC)
+            Pageable pageable,
+            @RequestParam(required = false) Long languageId,
+            @RequestParam(required = false) Long skillId,
+            @RequestParam(required = false) LocalDate from,
+            @RequestParam(required = false) LocalDate to,
+            HttpServletRequest request) {
         UUID userId = extractUserId(request);
-        List<StudySessionResponse> sessions = studySessionService.getSessionByUser(userId);
+        Page<StudySessionResponse> sessions = studySessionService.getSessionsByUser(userId, languageId,
+                skillId, from, to, pageable);
         return ResponseEntity.ok(sessions);
     }
 

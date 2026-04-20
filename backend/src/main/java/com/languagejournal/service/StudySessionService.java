@@ -2,6 +2,8 @@ package com.languagejournal.service;
 
 import com.languagejournal.dto.StudySessionRequest;
 import com.languagejournal.dto.StudySessionResponse;
+import com.languagejournal.exception.ForbiddenException;
+import com.languagejournal.exception.ResourceNotFoundException;
 import com.languagejournal.model.Language;
 import com.languagejournal.model.Skill;
 import com.languagejournal.model.StudySession;
@@ -65,17 +67,17 @@ public class StudySessionService {
     @Transactional
     public StudySessionResponse createSession(UUID userId, StudySessionRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Language language = languageRepository.findById(request.getLanguageId())
-                .orElseThrow(() -> new RuntimeException("Language not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Language not found"));
 
         if (!language.getUser().getId().equals(userId)) {
-            throw new RuntimeException("Unauthorized");
+            throw new ForbiddenException("Unauthorized");
         }
 
         Skill skill = skillRepository.findById(request.getSkillId())
-                .orElseThrow(() -> new RuntimeException("Skill not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Skill not found"));
 
         StudySession studySession = new StudySession(
                 user,
@@ -92,21 +94,21 @@ public class StudySessionService {
     @Transactional
     public StudySessionResponse updateSession(UUID userId, Long sessionId, StudySessionRequest request) {
         StudySession studySession = studySessionRepository.findById(sessionId)
-                .orElseThrow(() -> new RuntimeException("Session not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Session not found"));
 
         if (!studySession.getUser().getId().equals(userId)) {
-            throw new RuntimeException("Unauthorized");
+            throw new ForbiddenException("Unauthorized");
         }
 
         Language language = languageRepository.findById(request.getLanguageId())
-                .orElseThrow(() -> new RuntimeException("Language not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Language not found"));
 
         if (!language.getUser().getId().equals(userId)) {
-            throw new RuntimeException("Unauthorized");
+            throw new ForbiddenException("Unauthorized");
         }
 
         Skill skill = skillRepository.findById(request.getSkillId())
-                .orElseThrow(() -> new RuntimeException("Skill not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Skill not found"));
 
         studySession.setLanguage(language);
         studySession.setSkill(skill);
@@ -120,10 +122,10 @@ public class StudySessionService {
     @Transactional
     public void deleteSession(UUID userId, Long sessionId) {
         StudySession studySession = studySessionRepository.findById(sessionId)
-                .orElseThrow(() -> new RuntimeException("Session not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Session not found"));
 
         if (!studySession.getUser().getId().equals(userId)) {
-            throw new RuntimeException("Unauthorized");
+            throw new ForbiddenException("Unauthorized");
         }
 
         studySessionRepository.delete(studySession);

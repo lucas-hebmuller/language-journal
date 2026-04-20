@@ -2,6 +2,8 @@ package com.languagejournal.service;
 
 import com.languagejournal.dto.LanguageRequest;
 import com.languagejournal.dto.LanguageResponse;
+import com.languagejournal.exception.ForbiddenException;
+import com.languagejournal.exception.ResourceNotFoundException;
 import com.languagejournal.model.Language;
 import com.languagejournal.model.User;
 import com.languagejournal.repository.LanguageRepository;
@@ -42,7 +44,7 @@ public class LanguageService {
     @Transactional
     public LanguageResponse createLanguage(UUID userId, LanguageRequest request) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         Language language = new Language(user, request.getName(), request.getColorHex());
 
@@ -52,10 +54,10 @@ public class LanguageService {
     @Transactional
     public LanguageResponse updateLanguage(UUID userId, Long languageId, LanguageRequest request) {
         Language language = languageRepository.findById(languageId)
-                .orElseThrow(() -> new RuntimeException("Language not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Language not found"));
 
         if (!language.getUser().getId().equals(userId)) {
-            throw new RuntimeException("Unauthorized");
+            throw new ForbiddenException("Unauthorized");
         }
 
         language.setName(request.getName());
@@ -67,10 +69,10 @@ public class LanguageService {
     @Transactional
     public void deleteLanguage(UUID userId, Long languageId) {
         Language language = languageRepository.findById(languageId)
-                .orElseThrow(() -> new RuntimeException("Language not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Language not found"));
 
         if (!language.getUser().getId().equals(userId)) {
-            throw new RuntimeException("Unauthorized");
+            throw new ForbiddenException("Unauthorized");
         }
 
         languageRepository.delete(language);

@@ -2,6 +2,7 @@ package com.languagejournal.controller;
 
 import com.languagejournal.dto.StudySessionRequest;
 import com.languagejournal.dto.StudySessionResponse;
+import com.languagejournal.exception.ResourceNotFoundException;
 import com.languagejournal.security.JwtUtil;
 import com.languagejournal.service.StudySessionService;
 import com.languagejournal.service.UserService;
@@ -36,7 +37,7 @@ public class StudySessionController {
         String token = request.getHeader("Authorization").substring(7);
         String email = jwtUtil.extractEmail(token);
         return userService.getUserByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"))
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"))
                 .getId();
     }
 

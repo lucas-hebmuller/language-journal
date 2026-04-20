@@ -3,6 +3,8 @@ package com.languagejournal.controller;
 import com.languagejournal.dto.AuthResponse;
 import com.languagejournal.dto.LoginRequest;
 import com.languagejournal.dto.RegisterRequest;
+import com.languagejournal.exception.BadRequestException;
+import com.languagejournal.exception.ResourceNotFoundException;
 import com.languagejournal.model.User;
 import com.languagejournal.security.JwtUtil;
 import com.languagejournal.service.UserService;
@@ -40,10 +42,10 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         User user = userService.getUserByEmail(request.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found."));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new BadRequestException("Invalid password");
         }
 
         String token = jwtUtil.generateToken(user.getEmail());

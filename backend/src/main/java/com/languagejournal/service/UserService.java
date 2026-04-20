@@ -1,6 +1,7 @@
 package com.languagejournal.service;
 
 import com.languagejournal.dto.RegisterRequest;
+import com.languagejournal.exception.BadRequestException;
 import com.languagejournal.model.User;
 import com.languagejournal.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -27,7 +28,7 @@ public class UserService {
     @Transactional
     public User register(RegisterRequest request) {
         if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already in use");
+            throw new BadRequestException("Email already in use");
         }
 
         User user = new User(request.getName(), request.getEmail(),

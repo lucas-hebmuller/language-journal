@@ -21,8 +21,8 @@ public interface StudySessionRepository extends JpaRepository<StudySession, Long
     WHERE s.user.id = :userId
     AND (:languageId IS NULL OR s.language.id = :languageId)
     AND (:skillId IS NULL OR s.skill.id = :skillId)
-    AND (:from IS NULL OR s.date >= :from)
-    AND (:to IS NULL OR s.date <= :to)
+    AND (CAST(:from AS date) IS NULL OR s.date >= :from)
+    AND (CAST(:to AS date) IS NULL OR s.date <= :to)
     ORDER BY s.date DESC
 """)
     Page<StudySession> findFiltered(

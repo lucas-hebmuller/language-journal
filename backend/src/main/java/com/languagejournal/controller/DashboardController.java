@@ -1,6 +1,8 @@
 package com.languagejournal.controller;
 
 import com.languagejournal.dto.DashboardSummaryResponse;
+import com.languagejournal.dto.SkillBreakdownResponse;
+import com.languagejournal.dto.TrendResponse;
 import com.languagejournal.dto.WeeklyProgressResponse;
 import com.languagejournal.exception.ResourceNotFoundException;
 import com.languagejournal.security.JwtUtil;
@@ -50,5 +52,19 @@ public class DashboardController {
         UUID userId = extractUserId(request);
         List<WeeklyProgressResponse> weeklyProgress = dashboardService.getWeeklyProgress(userId);
         return ResponseEntity.ok(weeklyProgress);
+    }
+
+    @GetMapping("/trend")
+    public ResponseEntity<List<TrendResponse>> getTrend(HttpServletRequest request) {
+        UUID userId = extractUserId(request);
+        List<TrendResponse> trend = dashboardService.getTrend(userId);
+        return ResponseEntity.ok(trend);
+    }
+
+    @GetMapping("/by-skill")
+    public ResponseEntity<List<SkillBreakdownResponse>> getSkillBreakdown(HttpServletRequest request) {
+        UUID userId = extractUserId(request);
+        List<SkillBreakdownResponse> skillBreakdown = dashboardService.getSkillBreakdown(userId);
+        return ResponseEntity.ok(skillBreakdown);
     }
 }

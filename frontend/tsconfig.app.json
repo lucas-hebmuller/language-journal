@@ -1,25 +1,64 @@
 {
   "compilerOptions": {
+    // Cache file location — speeds up subsequent TypeScript builds
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+
+    // Compile to ES2023 JavaScript — modern syntax, no unnecessary downleveling
     "target": "es2023",
+
+    // Which built-in type definitions to include
+    // ES2023 = modern JS methods, DOM = browser APIs (document, window, etc.)
     "lib": ["ES2023", "DOM"],
+
+    // Use ES modules (import/export) — matches how Vite bundles code
     "module": "esnext",
+
+    // Include Vite-specific type definitions (e.g., import.meta.env)
     "types": ["vite/client"],
+
+    // Don't type-check node_modules — speeds up compilation significantly
     "skipLibCheck": true,
 
-    /* Bundler mode */
+    /* Bundler mode — these settings tell TypeScript that Vite handles module resolution */
+
+    // Let Vite (not TypeScript) resolve module paths
     "moduleResolution": "bundler",
+
+    // Allow imports like "./Component.tsx" with the extension included
     "allowImportingTsExtensions": true,
+
+    // Enforces using "import type" for type-only imports — cleaner output
     "verbatimModuleSyntax": true,
+
+    // Treat every file as a module even without import/export statements
     "moduleDetection": "force",
+
+    // Don't emit .js files — Vite does the actual compilation, TS only type-checks
     "noEmit": true,
+
+    // Use the modern JSX transform (no need to import React in every file)
     "jsx": "react-jsx",
 
-    /* Linting */
+    /* Linting — TypeScript catches potential bugs at compile time */
+
+    // Error on declared but unused variables
     "noUnusedLocals": true,
+
+    // Error on declared but unused function parameters
     "noUnusedParameters": true,
+
+    // Only allow syntax that can be erased (no enums, no namespaces)
     "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true
+
+    // Error if a switch case falls through without break
+    "noFallthroughCasesInSwitch": true,
+
+    // Path alias — "@/types/api.types" resolves to "./src/types/api.types"
+    // Avoids ugly relative paths like "../../../types/api.types"
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   },
+  // Only type-check files inside src/
   "include": ["src"]
 }

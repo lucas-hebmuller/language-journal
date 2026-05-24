@@ -1,8 +1,23 @@
+import { Routes, Route } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import DashboardPage from "./pages/DashboardPage";
+import NotFoundPage from "./pages/NotFoundPage";
+import LanguagesPage from "./pages/LanguagesPage";
+
 function App() {
   return (
-    <div>
-      <h1>Language Journal</h1>
-    </div>
+    <Routes>
+      {/* Public routes: */}
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+
+      {/* Protected routes: */}
+      <Route path="/" element={<DashboardPage />} />
+      <Route path="/languages" element={<LanguagesPage />} />
+
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
   );
 }
 

@@ -4,6 +4,7 @@ import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import LanguagesPage from "./pages/LanguagesPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -13,8 +14,23 @@ function App() {
       <Route path="/register" element={<RegisterPage />} />
 
       {/* Protected routes: */}
-      <Route path="/" element={<DashboardPage />} />
-      <Route path="/languages" element={<LanguagesPage />} />
+
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/languages"
+        element={
+          <ProtectedRoute>
+            <LanguagesPage />
+          </ProtectedRoute>
+        }
+      />
 
       <Route path="*" element={<NotFoundPage />} />
     </Routes>

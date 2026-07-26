@@ -3,6 +3,7 @@ import { useLanguages } from "@/hooks/useLanguages";
 import LanguageForm from "@/components/LanguageForm";
 import type { LanguageFormData } from "@/types/language.schemas";
 import type { LanguageResponse } from "@/types/language.types";
+import Navbar from "@/components/Navbar";
 
 function LanguagesPage() {
   const {
@@ -50,6 +51,7 @@ function LanguagesPage() {
 
   return (
     <div>
+      <Navbar />
       <h1>My Languages</h1>
       <button onClick={() => setShowForm(true)} className="btn-primary">
         + Add Language

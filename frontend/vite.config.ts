@@ -5,6 +5,9 @@ import path from "path";
 export default defineConfig({
   // Enable React support (JSX transform, fast refresh during development)
   plugins: [react()],
+  server: {
+    port: 3000,
+  },
   resolve: {
     alias: {
       /*

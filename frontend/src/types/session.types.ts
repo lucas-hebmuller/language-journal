@@ -6,7 +6,7 @@ export interface StudySessionResponse {
     skillName: string;
     date: string;
     durationMinutes: number;
-    notes: string;
+    notes: string | null;
     createdAt: string;
 }
 
@@ -16,4 +16,13 @@ export interface StudySessionRequest {
     date: string;
     durationMinutes: number;
     notes: string;
+}
+
+export interface SessionFilters {
+  languageId?: number;
+  skillId?: number;
+  from?: string;   // "YYYY-MM-DD"
+  to?: string;
+  page?: number;   // 0-indexed
+  size?: number;
 }

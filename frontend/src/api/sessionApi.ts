@@ -26,10 +26,7 @@ export const updateSession = async (
   id: number,
   data: StudySessionRequest,
 ): Promise<StudySessionResponse> => {
-  const response = await API.put<StudySessionResponse>(
-    `/sessions/${id}`,
-    data,
-  );
+  const response = await API.put<StudySessionResponse>(`/sessions/${id}`, data);
   return response.data;
 };
 

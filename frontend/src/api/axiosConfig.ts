@@ -20,7 +20,7 @@ const API = axios.create({
 
 /*
  * Request Interceptor.
- * Runs before every outgoing request, adds the JWT token to every API call. 
+ * Runs before every outgoing request, adds the JWT token to every API call.
  */
 API.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
@@ -38,7 +38,7 @@ API.interceptors.request.use(
 
 /*
  * Response Interceptor.
- * Run after every response comes back, allows global error handling 
+ * Run after every response comes back, allows global error handling
  */
 API.interceptors.response.use(
   // If the response is successfull (2xx), just pass it through unchanged
@@ -47,7 +47,7 @@ API.interceptors.response.use(
     // Don't redirect to login if the 401 came from /auth/ endpoints themselves
     const isAuthEndpoint = error.config?.url?.includes("/auth/");
     if (error.response?.status === 401 && !isAuthEndpoint) {
-      // Token is invalid or expired, so clear it and send the user to login  
+      // Token is invalid or expired, so clear it and send the user to login
       localStorage.removeItem("token");
       window.location.href = "/login";
     }
